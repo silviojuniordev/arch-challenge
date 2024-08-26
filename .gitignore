@@ -1,0 +1,11 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/src/Financial.Entries.WebApi/bin/Debug/net8.0
+/src/Financial.Entries.WebApi/obj
+/src/Financial.Entries.Data/bin/Debug/net8.0
+/src/Financial.Entries.Data/obj
+/src/Financial.Entries.Domain/bin/Debug/net8.0
+/src/Financial.Entries.Domain/obj
