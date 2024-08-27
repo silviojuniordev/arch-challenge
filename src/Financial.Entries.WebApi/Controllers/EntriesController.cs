@@ -1,8 +1,8 @@
 ﻿using Financial.Entries.Domain.Abstractions;
 using Financial.Entries.Domain.Commands;
 using Financial.Entries.Domain.Entities.Entries;
+using Financial.Entries.Domain.Queries;
 using Financial.Entries.Domain.Support.Mediator;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Financial.Entries.WebApi.Controllers
@@ -13,11 +13,15 @@ namespace Financial.Entries.WebApi.Controllers
     {
         private readonly IMediatorHandler _mediatorHandler;
         private readonly IEntrieRepository _entrieRepository;
+        private readonly IEntrieQueries _entrieQueries;
 
-        public EntriesController(IMediatorHandler mediatorHandler, IEntrieRepository entrieRepository)
+        public EntriesController(IMediatorHandler mediatorHandler,
+                                IEntrieRepository entrieRepository, 
+                                IEntrieQueries entrieQueries)
         {
             _mediatorHandler = mediatorHandler;
             _entrieRepository = entrieRepository;
+            _entrieQueries = entrieQueries;
         }
 
 
@@ -31,15 +35,24 @@ namespace Financial.Entries.WebApi.Controllers
         }
 
         [HttpGet("lancamento/todos")]
-        public async Task<IEnumerable<Entrie>> GetAllAsync()
+        public async Task<IActionResult> GetAllAsync()
         {
-            return await _entrieRepository.GetAllAsync();
+            var result = await _entrieRepository.GetAllAsync();
+            return Ok(result);
         }
 
         [HttpGet("lancamento/{id}")]
-        public async Task<Entrie> ProdutoDetalhe(Guid id)
+        public async Task<IActionResult> ProdutoDetalhe(Guid id)
         {
-            return await _entrieRepository.GetById(id);
+            var result = await _entrieRepository.GetById(id);
+            return result == null ? NotFound() : Ok(result);
+        }
+
+        [HttpGet("lancamento/consolidado")]
+        public async Task<IActionResult> GetConsolidateAsync(DateTime InitialDate, DateTime FinalDate)
+        {
+            var result = await _entrieQueries.GetConsolidateAsync(InitialDate, FinalDate);
+            return Ok(result);
         }
     }
 }

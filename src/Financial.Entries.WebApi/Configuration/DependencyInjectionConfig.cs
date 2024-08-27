@@ -3,6 +3,7 @@ using Financial.Entries.Data.Repository;
 using Financial.Entries.Domain.Abstractions;
 using Financial.Entries.Domain.Commands;
 using Financial.Entries.Domain.Events;
+using Financial.Entries.Domain.Queries;
 using Financial.Entries.Domain.Queues.Configuration;
 using Financial.Entries.Domain.Support.Mediator;
 using FluentValidation.Results;
@@ -21,7 +22,7 @@ namespace Financial.Entries.WebApi.Configuration
             
             services.AddScoped<DefaultDbContext>();
             services.AddSingleton<IMessageSender, MessageSender>();
-            services.AddSingleton<IMessageBus>(new MessageBus(configuration.GetSection("MessageQueueConnection:MessageBus").Value.ToString()));
+            services.AddScoped<IEntrieQueries, EntrieQueries>();
             services.AddScoped<IEntrieRepository, EntrieRepository>();
         }
     }

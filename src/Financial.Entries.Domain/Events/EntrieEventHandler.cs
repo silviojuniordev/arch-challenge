@@ -8,18 +8,9 @@ namespace Financial.Entries.Domain.Events
 {
     public class EntrieEventHandler : INotificationHandler<EntrieRegisteredEvent>
     {
-        private readonly IMessageBus _bus;
-
-        public EntrieEventHandler(IMessageBus bus)
-        {
-            _bus = bus;
-        }
-
         public async Task Handle(EntrieRegisteredEvent notification, CancellationToken cancellationToken)
         {
-
             var message = new EntrieRegisteredIntegrationEvent(notification.Id, notification.EffectiveDate, notification.Description, notification.EntrieType, notification.Value);
-            await _bus.RequestAsync<EntrieRegisteredIntegrationEvent, ResponseMessage>(message);
         }
     }
 }
